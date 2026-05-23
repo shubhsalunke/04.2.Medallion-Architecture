@@ -1,4 +1,4 @@
-# Medallion Architecture Activity
+# Medallion Architecture 
 
 ## Project Overview
 
@@ -35,7 +35,6 @@ git clone https://github.com/shubhsalunke/Flask-PostgreSQL-Dockerfile.git
 # Step 3 — Navigate to Project Directory
 
 ```bash
-cd Flask-PostgreSQL-Dockerfile
 cd 04.2.Medallion-Architecture
 ```
 
@@ -50,7 +49,7 @@ ls
 Expected Output:
 
 ```bash
-bronze  gold  scripts  silver
+README.md  bronze  gold  scripts  silver
 ```
 
 ---
