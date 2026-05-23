@@ -11,7 +11,7 @@ This activity demonstrates the implementation of **Medallion Architecture** usin
 Server Used:
 
 ```bash
-20.110.145.182
+SERVER IP
 ```
 
 ---
@@ -19,27 +19,29 @@ Server Used:
 # Step 1 — Connect to Server
 
 ```bash
-ssh azureuser@20.110.145.182
+ssh azureuser@SERVER_IP
 ```
 
 ---
 
-# Step 2 — Create Project Directory
+# Step 2 — Clone Repository
 
 ```bash
-mkdir -p ~/medallion-activity
-cd ~/medallion-activity
+git clone https://github.com/shubhsalunke/Flask-PostgreSQL-Dockerfile.git
 ```
 
 ---
 
-# Step 3 — Create Architecture Folders
+# Step 3 — Navigate to Project Directory
 
 ```bash
-mkdir -p bronze silver gold scripts
+cd Flask-PostgreSQL-Dockerfile
+cd 04.2.Medallion-Architecture
 ```
 
-Verify:
+---
+
+# Step 4 — Verify Project Files
 
 ```bash
 ls
@@ -53,16 +55,16 @@ bronze  gold  scripts  silver
 
 ---
 
-# Step 4 — Install Required Packages
+# Step 5 — Install Required Packages
 
 ```bash
 sudo apt update
-sudo apt install python3-venv python3-pip tree -y
+sudo apt install python3-venv python3-pip tree git -y
 ```
 
 ---
 
-# Step 5 — Create Python Virtual Environment
+# Step 6 — Create Python Virtual Environment
 
 ```bash
 python3 -m venv venv
@@ -82,7 +84,7 @@ Expected:
 
 ---
 
-# Step 6 — Install Pandas
+# Step 7 — Install Pandas
 
 ```bash
 pip install pandas
@@ -96,54 +98,41 @@ python -c "import pandas; print(pandas.__version__)"
 
 ---
 
-# Step 7 — Create Bronze Layer Data
+# Step 8 — Verify Bronze Layer File
 
 ```bash
-cat > bronze/sales_raw.csv <<'EOF'
+cat bronze/sales_raw.csv
+```
+
+Expected Output:
+
+```bash
 id,name,product,amount,city
 1,Rahul,Laptop,50000,Pune
 2,Amit,Mouse,500,Mumbai
 3,Sneha,Keyboard,1500,Pune
 4,Rahul,Laptop,50000,Pune
 5,Neha,Monitor,,Nashik
-EOF
-```
-
-Verify File:
-
-```bash
-cat bronze/sales_raw.csv
 ```
 
 ---
 
-# Step 8 — Create Bronze → Silver Script
+# Step 9 — Verify Scripts
 
 ```bash
-cat > scripts/bronze_to_silver.py <<'EOF'
-import pandas as pd
+ls scripts
+```
 
-df = pd.read_csv("bronze/sales_raw.csv")
+Expected Output:
 
-# Remove duplicates
-df = df.drop_duplicates()
-
-# Fill missing values
-df["amount"] = df["amount"].fillna(0)
-
-# Standardize city names
-df["city"] = df["city"].str.upper()
-
-# Save cleaned data
-df.to_csv("silver/sales_clean.csv", index=False)
-
-print("Bronze to Silver completed")
-EOF
+```bash
+bronze_to_silver.py
+silver_to_gold.py
 ```
 
 ---
 
-# Step 9 — Run Bronze → Silver Pipeline
+# Step 10 — Run Bronze → Silver Pipeline
 
 ```bash
 python scripts/bronze_to_silver.py
@@ -157,7 +146,7 @@ Bronze to Silver completed
 
 ---
 
-# Step 10 — Verify Silver Layer
+# Step 11 — Verify Silver Layer
 
 ```bash
 cat silver/sales_clean.csv
@@ -172,26 +161,6 @@ id,name,product,amount,city
 3,Sneha,Keyboard,1500.0,PUNE
 4,Rahul,Laptop,50000.0,PUNE
 5,Neha,Monitor,0.0,NASHIK
-```
-
----
-
-# Step 11 — Create Silver → Gold Script
-
-```bash
-cat > scripts/silver_to_gold.py <<'EOF'
-import pandas as pd
-
-df = pd.read_csv("silver/sales_clean.csv")
-
-gold = df.groupby("city")["amount"].sum().reset_index()
-
-gold.columns = ["city", "total_sales"]
-
-gold.to_csv("gold/city_sales_report.csv", index=False)
-
-print("Silver to Gold completed")
-EOF
 ```
 
 ---
@@ -238,6 +207,12 @@ Verify Installation:
 
 ```bash
 tree --version
+```
+
+Expected Output:
+
+```bash
+tree v2.x.x
 ```
 
 ---
@@ -287,6 +262,7 @@ Analytics / Reporting
 * Python
 * Pandas
 * Linux
+* Git
 * Virtual Environment (venv)
 
 ---
